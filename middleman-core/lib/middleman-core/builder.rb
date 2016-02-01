@@ -205,6 +205,7 @@ module Middleman
 
       source.unlink if source.is_a? Tempfile
 
+      puts "Trigger called in export_file: #{output_file}; Mode: #{mode}; Source: #{source}"
       trigger(mode, output_file)
       # end
     end
@@ -227,11 +228,13 @@ module Middleman
             if response.status == 200
               export_file!(output_file, binary_encode(response.body))
             else
+              puts "Trigger called in output_resource: #{resource}"
               trigger(:error, output_file, response.body)
               return false
             end
           end
         rescue => e
+          puts "Trigger called in output_resource resuce: #{e}"
           trigger(:error, output_file, "#{e}\n#{e.backtrace.join("\n")}")
           return false
         end
@@ -276,6 +279,7 @@ module Middleman
 
       to_remove.each do |f|
         FileUtils.rm(f)
+        puts "Trigger called in clean!"
         trigger(:deleted, f)
       end
     end
@@ -286,8 +290,9 @@ module Middleman
       string
     end
 
-    Contract Symbol, Or[String, Pathname], Maybe[String] => Any
+    ###Contract Symbol, Or[String, Pathname], Maybe[String] => Any
     def trigger(event_type, target, extra=nil)
+      puts "event type: #{event_type}"
       @events[event_type] ||= []
       @events[event_type] << target
 
