@@ -290,7 +290,7 @@ module Middleman
       string
     end
 
-    ###Contract Symbol, Or[String, Pathname], Maybe[String] => Any
+    Contract Symbol, Or[String, Pathname], Maybe[String] => Any
     def trigger(event_type, target, extra=nil)
       puts "event type: #{event_type}"
       @events[event_type] ||= []
